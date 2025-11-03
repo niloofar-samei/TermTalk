@@ -3,6 +3,11 @@ import cors from "cors";
 import http from "http";
 import {Server} from "socket.io";
 
+interface ChatMessage {
+  username: string;
+  text: string;
+}
+
 const app = express();
 const server = http.createServer(app);
 const PORT = 4000;
@@ -16,7 +21,7 @@ app.use(express.json());
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  socket.on("chat message", (msg) => {
+  socket.on("chat message", (msg: ChatMessage) => {
     io.emit("chat message", msg);
   });
 

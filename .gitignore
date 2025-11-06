@@ -46,9 +46,8 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
-
-
-
-
-
-
+# =========================
+# Postgres
+# =========================
+db
+.s.PGSQL.5432.lock

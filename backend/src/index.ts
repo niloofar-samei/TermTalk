@@ -1,4 +1,5 @@
 import express from "express";
+import pool from "./db";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
@@ -22,13 +23,132 @@ app.use(express.json());
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  socket.on("chat message", (msg: Omit<ChatMessage, "timestamp">) => {
-    const messageWithTime: ChatMessage = {
-      ...msg,
-      timestamp: new Date().toLocaleTimeString(),
-    };
+socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
+  const timestamp = new Date().toLocaleTimeString();
+  const messageWithTime: ChatMessage = { ...msg, timestamp };
 
-    io.emit("chat message", messageWithTime);
+  // Save to PostgreSQL
+  try {
+    await pool.query(
+      "INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+      [msg.username, msg.text, timestamp]
+    );
+  } catch (err) {
+    console.error("Failed to save message:", err);
+  }
+
+  // Emit to all clients
+  io.emit("chat message", messageWithTime);
+});
+
+socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
+  const timestamp = new Date().toLocaleTimeString();
+  const messageWithTime: ChatMessage = { ...msg, timestamp };
+
+  // Save to PostgreSQL
+  try {
+    await pool.query(
+      "INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+      [msg.username, msg.text, timestamp]
+    );
+  } catch (err) {
+    console.error("Failed to save message:", err);
+  }
+
+  // Emit to all clients
+  io.emit("chat message", messageWithTime);
+});
+
+socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
+  const timestamp = new Date().toLocaleTimeString();
+  const messageWithTime: ChatMessage = { ...msg, timestamp };
+
+  // Save to PostgreSQL
+  try {
+    await pool.query(
+      "INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+      [msg.username, msg.text, timestamp]
+    );
+  } catch (err) {
+    console.error("Failed to save message:", err);
+  }
+
+  // Emit to all clients
+  io.emit("chat message", messageWithTime);
+});
+
+socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
+  const timestamp = new Date().toLocaleTimeString();
+  const messageWithTime: ChatMessage = { ...msg, timestamp };
+
+  // Save to PostgreSQL
+  try {
+    await pool.query(
+      "INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+      [msg.username, msg.text, timestamp]
+    );
+  } catch (err) {
+    console.error("Failed to save message:", err);
+  }
+
+  // Emit to all clients
+  io.emit("chat message", messageWithTime);
+});
+
+socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
+  const timestamp = new Date().toLocaleTimeString();
+  const messageWithTime: ChatMessage = { ...msg, timestamp };
+
+  // Save to PostgreSQL
+  try {
+    await pool.query(
+      "INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+      [msg.username, msg.text, timestamp]
+    );
+  } catch (err) {
+    console.error("Failed to save message:", err);
+  }
+
+  // Emit to all clients
+  io.emit("chat message", messageWithTime);
+});
+
+socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
+  const timestamp = new Date().toLocaleTimeString();
+  const messageWithTime: ChatMessage = { ...msg, timestamp };
+
+  // Save to PostgreSQL
+  try {
+    await pool.query(
+      "INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+      [msg.username, msg.text, timestamp]
+    );
+  } catch (err) {
+    console.error("Failed to save message:", err);
+  }
+
+  // Emit to all clients
+  io.emit("chat message", messageWithTime);
+});
+
+socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
+  const timestamp = new Date().toLocaleTimeString();
+  const messageWithTime: ChatMessage = { ...msg, timestamp };
+
+  // Save to PostgreSQL
+  try {
+    await pool.query(
+      "INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+      [msg.username, msg.text, timestamp]
+    );
+  } catch (err) {
+    console.error("Failed to save message:", err);
+  }
+
+  // Emit to all clients
+  io.emit("chat message", messageWithTime);
+});
+
   });
 
   socket.on("disconnect", () => {

@@ -25,6 +25,16 @@ function App() {
     }
   }, []);
 
+
+  useEffect(() => {
+  fetch("http://localhost:4000/messages")
+    .then((res) => res.json())
+    .then((data) => {
+      setMessages(data);
+    })
+    .catch((err) => console.error("Failed to fetch messages:", err));
+}, []);
+
   useEffect(() => {
     const handleMessage = (msg: ChatMessage) => {
       setMessages((prev) => [...prev, msg]);

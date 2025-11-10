@@ -57,7 +57,7 @@ function App() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.header}>Choco Chat</h1>
+      <h1 style={styles.header}>TermTalk</h1>
 
       <div style={styles.chatBox}>
         {messages.map((m, i) => (

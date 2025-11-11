@@ -15,6 +15,7 @@ function App() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const usernameSet = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [input, setInput] = useState("");
 
   // Prompt for username once
   useEffect(() => {
@@ -56,23 +57,65 @@ function App() {
 
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.header}>TermTalk</h1>
+    <div className="flex flex-col h-screen bg-stone-900 text-terminal-primary font-mono p-4">
+      {/* Header */}
+      <header className="mb-4">
+        <h1 className="text-xl text-terminal-secondary glow">
+          hello.sh — connected
+        </h1>
+      </header>
 
-      <div style={styles.chatBox}>
+      {/* Messages */}
+      <main className="flex-1 overflow-y-auto space-y-2">
+        {messages.map((msg, idx) => (
+          <p
+            key={idx}
+            className={
+              msg.username === username
+                ? "text-indigo-500"
+                : "text-green-400"
+            }
+          >
+            [{msg.username}] {msg.username === username ? ">" : "<"} {msg.text} - <i className="text-sm">{msg.timestamp}</i>
+          </p>
+        ))}
+      </main>
+
+      <div className="flex items-center text-lime-500">
+        <span className="text-terminal-accent mr-2">{">"}</span>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="[Home]~$ Type a command..."
+          className="flex-1 bg-transparent outline-none text-terminal-primary placeholder-terminal-secondary"
+        />
+        <span className="ml-1 animate-pulse text-terminal-accent">▮</span>
+      </div>
+        
+    </div>
+  );
+
+
+
+
+
+/*
+  return (
+    <div className="flex flex-col items-center h-screen bg-gray-900 text-green-400 font-mono p-4">
+      <h1 className="text-3xl font-bold mb-4 text-green-500 select-none">TermTalk</h1>
+
+      <div className="flex flex-col w-full max-w-2xl h-[70vh] bg-black border border-green-500 rounded-lg shadow-[0_0_10px_#22c55e] p-4 overflow-y-auto">
         {messages.map((m, i) => (
           <div
             key={i}
-            style={{
-              ...styles.message,
-              alignSelf: m.username === username ? "flex-end" : "flex-start",
-              backgroundColor:
-                m.username === username ? "#d899f1ff" : "#FFFFFF",
-            }}
+            className={`mb-2 p-2 rounded-lg max-w-[70%] ${
+              m.username === username
+                ? "self-end bg-green-900 text-green-200"
+                : "self-start bg-gray-800 text-green-400"
+            }`}
           >
-            <div style={styles.username}>
-              {m.username}{" "}
-              <span style={styles.timestamp}>[{m.timestamp}]</span>
+            <div className="text-xs font-bold opacity-70">
+              {m.username} <span className="text-gray-500">[{m.timestamp}]</span>
             </div>
             <div>{m.text}</div>
           </div>
@@ -80,20 +123,24 @@ function App() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div style={styles.inputRow}>
+      <div className="flex w-full max-w-2xl mt-4">
         <input
-          style={styles.input}
+          className="flex-1 bg-black border border-green-500 text-green-400 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          placeholder="Type a message..."
+          placeholder="Type your message..."
         />
-        <button style={styles.button} onClick={sendMessage}>
+        <button
+          className="ml-2 px-4 py-2 bg-green-700 hover:bg-green-600 text-black font-bold rounded-md shadow-[0_0_10px_#22c55e]"
+          onClick={sendMessage}
+        >
           Send
         </button>
       </div>
     </div>
   );
+*/
 }
 
 

@@ -16,7 +16,17 @@ function App() {
   const usernameSet = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [input, setInput] = useState("");
+  const [currentTime, setCurrentTime] = useState(new Date());
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000); // update every second
+
+    // cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, []);
+  
   // Prompt for username once
   useEffect(() => {
     if (!usernameSet.current) {
@@ -91,7 +101,9 @@ function App() {
         />
         <span className="ml-1 animate-pulse text-terminal-accent">▮</span>
       </div>
-        
+
+      <div className="bg-lime-500 mt-4">{currentTime.toLocaleString()}</div>
+
     </div>
   );
 

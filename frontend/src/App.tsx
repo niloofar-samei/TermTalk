@@ -1,15 +1,20 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 
+// Create a live connection to backend.
 const socket = io("http://localhost:4000");
 
+// TypeScript interface to define the message structure
 interface ChatMessage {
   username: string;
   text: string;
   timestamp: string;
 }
 
+// Main React component
 function App() {
+
+  // React state variables
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -19,6 +24,7 @@ function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(0);
 
+  // Online users
   useEffect(() => {
     socket.on("online users", (count: number) => {
       setOnlineUsers(count);
@@ -29,6 +35,7 @@ function App() {
     };
   }, []);
 
+  // Date time
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -47,15 +54,18 @@ function App() {
     }
   }, []);
 
+  // Load old messages from server
   useEffect(() => {
     fetch("http://localhost:4000/messages")
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => {
         setMessages(data);
       })
       .catch((err) => console.error("Failed to fetch messages:", err));
 }, []);
 
+  // Liste for new messages from the server and add them to
+  // the current messages
   useEffect(() => {
     const handleMessage = (msg: ChatMessage) => {
       setMessages((prev) => [...prev, msg]);
@@ -101,7 +111,8 @@ function App() {
         <div ref={messagesEndRef} />
       </main>
 
-      <div className="flex items-center text-lime-500">
+      {/* Footer */}
+      <footer className="flex items-center text-lime-500">
         <span className="text-terminal-accent mr-2">{">"}</span>
         <input
           value={input}
@@ -111,7 +122,7 @@ function App() {
           className="flex-1 bg-transparent outline-none text-terminal-primary placeholder-terminal-secondary"
         />
         <span className="ml-1 animate-pulse text-terminal-accent">▮</span>
-      </div>
+      </footer>
 
       <div className="bg-lime-500 mt-4 pl-2">{
         currentTime.toLocaleString()} ~ Online users: {onlineUsers}
@@ -120,4 +131,5 @@ function App() {
   );
 }
 
+// Make the App component available to other files.
 export default App;

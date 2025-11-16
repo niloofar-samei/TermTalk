@@ -16,7 +16,6 @@ function App() {
 
   // React state variables
   const [username, setUsername] = useState("");
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const usernameSet = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -78,10 +77,11 @@ function App() {
     };
   }, []);
 
+  // Send new message
   const sendMessage = () => {
-    if (message.trim()) {
-      socket.emit("chat message", { username: username, text: message });
-      setMessage("");
+    if (input.trim()) {
+      socket.emit("chat message", { username: username, text: input });
+      setInput("");
     }
   };
 
@@ -117,7 +117,11 @@ function App() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          //onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
           placeholder="[Home]~$ Type a command..."
           className="flex-1 bg-transparent outline-none text-terminal-primary placeholder-terminal-secondary"
         />

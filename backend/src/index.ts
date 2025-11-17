@@ -3,6 +3,8 @@ import pool from "./db";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 // TypeScript interface to define the message structure
 interface ChatMessage {
@@ -40,6 +42,7 @@ const io = new Server(server, {
   }
 });
 
+// Middlewares
 // Enable cross-origin requests. It only applies to WebSocket
 // connections.
 app.use(cors());
@@ -48,7 +51,45 @@ app.use(cors());
 // from the frontend.
 app.use(express.json());
 
+const JWT_SECRET = "asus";
+
+
+
 let onlineUsers = 0;
+
+// Register
+app.post("/register", async (req, res) => {
+  const {username, password} = req.body;
+  const hashed = await bcrypt.hash(password, 10);
+
+  try{
+    const result = await pool.query("INSERT INTO users(username, password_hash) VALUES($1, $2) RETURNING id, username", [username, hashed]);
+    res.json({user: result.rows[0]});
+  } catch (err) {
+    res.status(400).json({error: "Could not insert into db."});
+    //console.error("Register error: ", err);
+    //res.status(500).json({error: "Registration failed."});
+  }
+});
+
+// Login
+
+app.post("/login", async (req, res) => {
+  const {username, password} = req.body;
+  const result = await pool.query("SELECT * FROM users WHERE username=$1", [username]);
+
+  if (result.rows.length === 0) return res.status(401).json({error:"Invalid username or password"});
+
+  const user = result.rows[0];
+  const match = await bcrypt.compare(password, user.password_hash);
+
+  if (!match) return res.status(401).json({error: "Invalid username or password"});
+
+  const token = jwt.sign({id: user.id, username: user.username}, JWT_SECRET, {expiresIn: "1d"});
+  res.json({ token });
+})
+
+
 
 // Runs everytime a user connects
 io.on("connection", (socket) => {
@@ -121,3 +162,33 @@ app.get("/messages", async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
+
+// login o register beran tu file e jodaa
+// check kone username already exist
+// jwt ro bezaaram tu .env
+// code e frontend
+// {auea} => { oue } va comment haa 1 khat beshan
+// password, 10 mishe adda esho avaz kard?
+
+//If you want, I can now:
+// add JWT verification middleware
+// show how to protect a route /profile
+// send the token through socket.io
+
+// chat shoul not ask username manually
+//show chat ui only when logged-in
+
+//You do NOT verify the token
+
+//You do NOT protect any routes
+
+//You do NOT decode the token
+
+//You cannot attach the logged-in user to messages
+
+//You cannot check if the user is allowed to send messages
+
+//You do NOT store the token in the frontend
+
+//You do NOT send the token with requests

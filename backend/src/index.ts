@@ -3,8 +3,7 @@ import pool from "./db";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import authRoutes from "./routes/auth";
 
 // TypeScript interface to define the message structure
 interface ChatMessage {
@@ -40,38 +39,10 @@ app.use(cors());
 // Allows my server to automatically understand JSON data from the frontend.
 app.use(express.json());
 
-const JWT_SECRET = "asus";
+app.use(authRoutes);
+
 
 let onlineUsers = 0;
-
-// Register endpoint
-app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  const hashed = await bcrypt.hash(password, 10);
-
-  try{
-    const result = await pool.query("INSERT INTO users(username, password_hash) VALUES($1, $2) RETURNING id, username", [username, hashed]);
-    res.json({user: result.rows[0]});
-  } catch (err) {
-    res.status(400).json({error: "Could not insert into db."});
-  }
-});
-
-// Login endpoint
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  const result = await pool.query("SELECT * FROM users WHERE username=$1", [username]);
-
-  if (result.rows.length === 0) return res.status(401).json({ error:"Invalid username or password" });
-
-  const user = result.rows[0];
-  const match = await bcrypt.compare(password, user.password_hash);
-
-  if (!match) return res.status(401).json({ error: "Invalid username or password" });
-
-  const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "1d" });
-  res.json({ token });
-})
 
 // Runs everytime a user connects
 io.on("connection", (socket) => {

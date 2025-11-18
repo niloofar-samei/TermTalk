@@ -9,7 +9,7 @@ interface JWTPayload {
 }
 
 // Extend Express Request type to include user
-declare module "express-server-static-core" {
+declare module "express-serve-static-core" {
     interface Request {
         user?: JWTPayload;
     }

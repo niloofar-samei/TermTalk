@@ -4,6 +4,7 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import authRoutes from "./routes/auth";
+import { auth } from "./middleware/authMiddleware";
 
 // TypeScript interface to define the message structure
 interface ChatMessage {

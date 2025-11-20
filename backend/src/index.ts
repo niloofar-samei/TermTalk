@@ -88,6 +88,13 @@ socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
   });
 });
 
+app.get("/me", auth, (req, res) => {
+  res.json({
+    message: "Token is valid!!",
+    user: req.user, // Comes from middleware
+  })
+})
+
 // Creates a GET API endpoint for frontend to fetch all messages from database. Sends them in JSON format.
 app.get("/messages", async (req, res) => {
   try {
@@ -108,3 +115,10 @@ app.get("/messages", async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
+
+
+//You cannot attach the logged-in user to messages
+
+//You do NOT store the token in the frontend
+
+//You do NOT send the token with requests

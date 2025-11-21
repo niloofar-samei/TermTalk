@@ -23,7 +23,7 @@ function App() {
   const [input, setInput] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(0);
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token");)
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
 
   if (!token) {
     return <Login setToken={ setToken } />;

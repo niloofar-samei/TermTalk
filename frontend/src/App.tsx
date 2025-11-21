@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
+import Login from "./Login";
 
 // Create a live connection to backend.
 const socket = io("http://localhost:4000");
@@ -22,6 +23,11 @@ function App() {
   const [input, setInput] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(0);
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token");)
+
+  if (!token) {
+    return <Login setToken={ setToken } />;
+  }
 
   // Online users
   useEffect(() => {

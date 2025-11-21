@@ -61,7 +61,12 @@ function App() {
 
   // Load old messages from server
   useEffect(() => {
-    fetch("http://localhost:4000/messages")
+    fetch("http://localhost:4000/messages", {
+      headers: {
+        // Token sent here
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setMessages(data);

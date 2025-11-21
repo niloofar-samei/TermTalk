@@ -115,10 +115,3 @@ app.get("/messages", async (req, res) => {
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
-
-//You cannot attach the logged-in user to messages
-
-//You do NOT store the token in the frontend
-
-//You do NOT send the token with requests

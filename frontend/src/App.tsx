@@ -12,25 +12,25 @@ import ChatApp from "./ChatApp";
  */
 function App() {
 
-  // React state to store JWT token
-  // Initialize from localStorage if user has already logged in previously
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+	// React state to store JWT token
+	// Initialize from localStorage if user has already logged in previously
+	const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
 
-  /**
-   * Route protection:
-   * If no token is present, render the Login component.
-   * Pass the setToken function as a prop so that Login can update the token on successful login.
-   */
-  if (!token) {
-    return <Login setToken={ setToken } />;
-  }
+	/**
+	 * Route protection:
+	 * If no token is present, render the Login component.
+	 * Pass the setToken function as a prop so that Login can update the token on successful login.
+	 */
+	if (!token) {
+		return <Login setToken={ setToken } />;
+	}
 
-  /**
-   * If a token exists:
-   * Render the ChatApp component and pass the JWT token as a prop
-   * ChatApp uses this token to fetch messages and perform authenticated actions.
-   */
-  return <ChatApp token={ token } />;
+	/**
+	 * If a token exists:
+	 * Render the ChatApp component and pass the JWT token as a prop
+	 * ChatApp uses this token to fetch messages and perform authenticated actions.
+	 */
+	return <ChatApp token={ token } />;
 }
 
 // Export the App component so it can be used in index.tsx

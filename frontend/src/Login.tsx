@@ -7,7 +7,7 @@ import { useState } from "react";
  * @param setToken - Function provided by the parent component to store
  *   the JWT token after successful login.
  */
-function Login({ setToken }: { setToken: (t: strnig) => void }) {
+function Login({ setToken }: { setToken: (t: string) => void }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 

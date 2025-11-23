@@ -2,10 +2,9 @@ import { Router } from "express";
 import pool from "../db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config";
 
 const router = Router();
-
-const JWT_SECRET = "asus";
 
 /**
  * -------------------------------------------------------------

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
-const JWT_SECRET = "asus";
+import { JWT_SECRET } from "../config";
 
 /**
  * The expected shape of the JWT payload.

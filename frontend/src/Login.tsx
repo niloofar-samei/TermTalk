@@ -1,9 +1,23 @@
 import { useState } from "react";
 
+/**
+ * Login component allows users to enter their username and password,
+ * sends a login request to the backend, and stores the JWT token on success.
+ * 
+ * @param setToken - Function provided by the parent component to store
+ *   the JWT token after successful login.
+ */
 function Login({ setToken }: { setToken: (t: strnig) => void }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+	/**
+   * Handles login when user clicks the button:
+   * 1. Sends POST request to backend with username and password
+   * 2. If successful, saves JWT token in localStorage
+   * 3. Calls setToken to inform parent component
+   * 4. Alerts user if login fails
+   */
     const handleLogin = async () => {
         const res = await fetch("http://localhost:4000/login", {
             method: "POST",
@@ -14,8 +28,9 @@ function Login({ setToken }: { setToken: (t: strnig) => void }) {
         const data = await res.json();
 
         if (data.token) {
-			// Save token here
+			// Save token in localStorage
             localStorage.setItem("token", data.token);
+			// Inform parent component about the new token
             setToken(data.token);
         } else {
             alert("Login failed");
@@ -49,4 +64,5 @@ function Login({ setToken }: { setToken: (t: strnig) => void }) {
   );
 }
 
+// Export the Login component for use in other parts of the app
 export default Login;

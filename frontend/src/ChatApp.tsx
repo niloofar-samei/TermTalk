@@ -1,44 +1,70 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 
-// TypeScript interface to define the message structure
+// TypeScript interface for a chat message
 interface ChatMessage {
   username: string;
   text: string;
   timestamp: string;
 }
 
+/**
+ * Props expected by ChatApp component.
+ */
 interface ChatAppProps {
-  token: string;
+    //JWT token for authenticated API requests
+    token: string;
 }
 
-// Create a live connection to backend.
+/**
+ * Create a Socket.IO client connection to the backend server.
+ * This handles real-time communication for chat messages.
+ */
 const socket = io("http://localhost:4000");
 
-// Main React component
+/**
+ * ChatApp component
+ * 
+ * Handles:
+ *  - Rendering chat messages UI
+ *  - Sending new messages
+ *  - Real-time updates via Socket.IO connection
+ *  - Displaying online users
+ *  - Fetching old messages from the backend using JWT token
+ */
 function ChatApp({ token }: ChatAppProps) {
 
+
+  // ---------------------------
   // React state variables
+  // ---------------------------
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  // Ref to ensure username prompt shows only once
   const usernameSet = useRef(false);
+  // Ref for scrolling to latest message
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [input, setInput] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [onlineUsers, setOnlineUsers] = useState(0);
 
-  // Online users
+  // ---------------------------
+  // Listen for online users count updates
+  // ---------------------------
   useEffect(() => {
     socket.on("online users", (count: number) => {
       setOnlineUsers(count);
     });
 
+    // Cleanup lister on unmount
     return () => {
       socket.off("online users");
     };
   }, []);
 
-  // Date time
+  // ---------------------------
+  // Update current time every second
+  // ---------------------------
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -48,7 +74,9 @@ function ChatApp({ token }: ChatAppProps) {
     return () => clearInterval(interval);
   }, []);
   
-  // Prompt for username once
+  // ---------------------------
+  // Prompt the user for a username once
+  // ---------------------------
   useEffect(() => {
     if (!usernameSet.current) {
       const name = prompt("Enter your username") || "Anonymous";
@@ -57,11 +85,13 @@ function ChatApp({ token }: ChatAppProps) {
     }
   }, []);
 
-  // Load old messages from server
+  // ---------------------------
+  // Fetch old chat messages from backend
+  // ---------------------------
   useEffect(() => {
     fetch("http://localhost:4000/messages", {
       headers: {
-        // Token sent here
+        // Send JWT toke in Authorization header
         Authorization: `Bearer ${token}`,
       },
     })
@@ -70,10 +100,11 @@ function ChatApp({ token }: ChatAppProps) {
         setMessages(data);
       })
       .catch((err) => console.error("Failed to fetch messages:", err));
-}, []);
+}, [token]); // Add token as dependency in case it changes
 
-  // Liste for new messages from the server and add them to
-  // the current messages
+  // ---------------------------
+  // Listen for new incoming chat messages via Socket.IO and andd them to the current messages
+  // ---------------------------
   useEffect(() => {
     const handleMessage = (msg: ChatMessage) => {
       setMessages((prev) => [...prev, msg]);
@@ -81,12 +112,15 @@ function ChatApp({ token }: ChatAppProps) {
 
     socket.on("chat message", handleMessage);
 
+    // Cleanup listener on unmount
     return () => {
       socket.off("chat message", handleMessage);
     };
   }, []);
 
-  // Send new message
+  // ---------------------------
+  // Send a new chat message to the backend
+  // ---------------------------
   const sendMessage = () => {
     if (input.trim()) {
       socket.emit("chat message", { username: username, text: input });
@@ -94,6 +128,9 @@ function ChatApp({ token }: ChatAppProps) {
     }
   };
 
+  // ---------------------------
+  // JSX rendering
+  // ---------------------------
   return (
     <div className="flex flex-col h-screen bg-stone-900 text-terminal-primary font-mono p-4">
       {/* Header */}
@@ -144,5 +181,5 @@ function ChatApp({ token }: ChatAppProps) {
   );
 }
 
-// Make the App component available to other files.
+// Make the App component available to App.tsx file.
 export default ChatApp;

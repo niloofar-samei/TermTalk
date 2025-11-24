@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+interface LoginProps {
+	setToken: (t: string) => void;
+}
+
 /**
  * Login component allows users to enter their username and password,
  * sends a login request to the backend, and stores the JWT token on success.
@@ -7,7 +11,7 @@ import { useState } from "react";
  * @param setToken - Function provided by the parent component to store
  *   the JWT token after successful login.
  */
-function Login({ setToken }: { setToken: (t: string) => void }) {
+function Login({ setToken }: LoginProps) {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 

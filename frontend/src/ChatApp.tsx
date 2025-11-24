@@ -39,8 +39,6 @@ function ChatApp({ token }: ChatAppProps) {
   // ---------------------------
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  // Ref to ensure username prompt shows only once
-  const usernameSet = useRef(false);	
   // Ref for scrolling to latest message
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [input, setInput] = useState("");

@@ -78,9 +78,10 @@ router.post("/login", async (req, res) => {
 
   if (!match) return res.status(401).json({ error: "Invalid username or password" });
 
-   // If valid → generate JWT token
+  // If valid → generate JWT token
   const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: "1d" }); // Token valid for 1 day
-  res.json({ token });
+  // Return user info as well as JWT 
+  res.json({ token, user: { id: user.id, username: user.username,}, });
 });
 
 export default router;

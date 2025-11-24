@@ -30,6 +30,8 @@ function Login({ setToken }: { setToken: (t: string) => void }) {
 		if (data.token) {
 			// Save token in localStorage
 			localStorage.setItem("token", data.token);
+			// Save username so ChatApp can use it
+			localStorage.setItem("username", username);
 			// Inform parent component about the new token
 			setToken(data.token);
 		} else {

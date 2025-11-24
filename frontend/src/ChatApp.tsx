@@ -73,14 +73,11 @@ function ChatApp({ token }: ChatAppProps) {
 	return () => clearInterval(interval);
   }, []);
   
-  // ---------------------------
-  // Prompt the user for a username once
-  // ---------------------------
+  // Get username stored in localStorage
   useEffect(() => {
-	if (!usernameSet.current) {
-	  const name = prompt("Enter your username") || "Anonymous";
-	  setUsername(name);
-	  usernameSet.current = true;
+	const savedUsername = localStorage.getItem("username");
+	if (savedUsername) {
+		setUsername(savedUsername);
 	}
   }, []);
 

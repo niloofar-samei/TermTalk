@@ -68,7 +68,7 @@ socket.on("chat message", async (msg: Omit<ChatMessage, "timestamp">) => {
 	try {
 		// Here await tells JS to wait for this Promise to finish before going to the next line.
 		const result = await pool.query(
-			"INSERT INTO chat_messages(username, text, timestamp) VALUES($1, $2, $3)",
+			"INSERT INTO chat_messages(sender_id, receiver_id, message, timestamp) VALUES($1, $2, $3)",
 			[msg.username, msg.text, timestamp]
 		);
 		console.log("✅ Saved to DB:", result.rows[0]);
@@ -100,7 +100,7 @@ app.get("/messages", async (req, res) => {
 	try {
 		// Here await tells JS to wait for this Promise to finish before going to the next line.
 		const result = await pool.query(
-			"SELECT username, text, timestamp FROM chat_messages ORDER BY id ASC"
+			"SELECT sender_id, receiver_id, message, timestamp FROM chat_messages ORDER BY id ASC"
 		);
 
 		// It sends data back to frontend in JSON format

@@ -9,3 +9,4 @@ if (!process.env.JWT_SECRET) {
 
 // Export all global config values
 export const JWT_SECRET = process.env.JWT_SECRET;
+export const PORT = process.env.PORT || 4000;

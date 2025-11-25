@@ -4,11 +4,8 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import authRoutes from "./routes/auth";
+import { PORT } from "./config";
 import { auth } from "./middleware/authMiddleware";
-import dotenv from "dotenv";
-
-// Load environment variables from the .env file into process.env
-dotenv.config();
 
 // TypeScript interface to define the message structure
 interface ChatMessage {
@@ -22,7 +19,6 @@ const app = express();
 
 // Wrap Express server so socket.io can work with it
 const server = http.createServer(app);
-const PORT = 4000;
 
 // Initialize socket.io and allow my React frontend to connect. Attach socket.io to the HTTP server so it can handle real-time WebSocket connections.
 // cors: {...} sets cors rules which control which websites can talk to my backend.

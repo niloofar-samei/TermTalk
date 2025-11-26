@@ -33,9 +33,13 @@ function Login({ setToken }: LoginProps) {
 
 		if (data.token) {
 			// Save token in localStorage
+			console.log("the token is: ", data.token);
 			localStorage.setItem("token", data.token);
+
 			// Save username so ChatApp can use it
+			console.log("the username is: ", data.user.username)
 			localStorage.setItem("username", username);
+
 			// Inform parent component about the new token
 			setToken(data.token);
 		} else {
@@ -44,28 +48,40 @@ function Login({ setToken }: LoginProps) {
 	};
 
 	return (
-	<div className="p-4 text-white">
-	<h1 className="text-xl mb-4">Login</h1>
-	
-	<input
-		className="block mb-2 text-black"
-		placeholder="Username"
-		value={username}
-		onChange={(e) => setUsername(e.target.value)}
-		/>
+		<div className="p-4 text-white">
+			<form className="max-w-sm mx-auto p-4">
+				<div className="flex items-center border-b border-teal-500 py-2">
 
-	<input
-		className="block mb-2 text-black"
-		placeholder="Password"
-		value={password}
-		onChange={(e) => setPassword(e.target.value)}
-		type="password"
-	/>
+					<input
+						className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+						type="text"
+						placeholder="Username"
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
+					/>
 
-	<button onClick={handleLogin} className="bg-blue-600 px-4 py-2 rounded">
-		Login
-	</button>
-	</div>
+				</div>
+				<div className="flex items-center border-b border-teal-500 py-2">
+
+					<input
+						className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+						type="password"
+						placeholder="Password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+					/>
+
+				    <button
+						className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+						type="button"
+						onClick={handleLogin}
+					>
+      					Sign Up
+    				</button>
+				
+				</div>
+			</form>
+		</div>
   );
 }
 
